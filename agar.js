@@ -51,13 +51,15 @@ AGAR.cy = AGAR.canvas.height/2;
 AGAR.go = true;
 AGAR.moveRandomly = function(mint, maxt) {
     var time = (maxt-mint)*Math.random() + mint;
-    var theta = 2*Math.pi*Math.random();
-    var radius = 50;
-    var x = AGAR.cx + radius*Math.cos(theta);
-    var y = AGAR.cy + radius*Math.sin(theta);
+    var theta = 2*Math.PI*Math.random();
+    var radius = 250;
+    var x = Math.floor(AGAR.cx + radius*Math.cos(theta));
+    var y = Math.floor(AGAR.cy + radius*Math.sin(theta));
+    var evnt = simpleMouseMove(x, y);
+    AGAR.canvas.dispatchEvent(evnt);
     if(AGAR.go) {
         setTimeout(
-            function() { moveRandomly(mint, maxt); },
+            function() { AGAR.moveRandomly(mint, maxt); },
             time
         )
     }
