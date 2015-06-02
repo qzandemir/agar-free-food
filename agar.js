@@ -35,6 +35,21 @@ function mouseEvent(type, sx, sy, cx, cy) {
 }
 // End taken section
 
+// Okay, now we need to be able to create a keydown event
+function keydownEvent(chr) {
+    var e = $.Event('keydown');
+    e.keyCode= chr.charCodeAt(0);
+    e.which = chr.charCodeAt(0);
+    $('canvas').trigger(e);
+}
+
+function keyupEvent(chr) {
+    var e = $.Event('keyup');
+    e.keyCode= chr.charCodeAt(0);
+    e.which = chr.charCodeAt(0);
+    $('canvas').trigger(e);
+}
+
 // Wrap around the above
 function simpleMouseMove(x, y) {
     return mouseEvent("mousemove", x, y, x, y);
@@ -64,3 +79,50 @@ AGAR.moveRandomly = function(mint, maxt) {
         )
     }
 }
+
+AGAR.splitManyTimes = function(n) {
+    if(n > 0) {
+        if(n%2 === 0) {
+            keydownEvent(" ");
+        } else {
+            keyupEvent(" ");
+        }
+        setTimeout(
+            function() {
+                AGAR.splitManyTimes(n-1);
+            },
+            1
+        );
+    } else {
+        console.log("done");
+    }
+}
+
+AGAR.ejectManyTimes = function(n) {
+    if(n > 0) {
+        if(n%2 === 0) {
+            keydownEvent("W");
+        } else {
+            keyupEvent("W");
+        }
+        setTimeout(
+            function() {
+                AGAR.ejectManyTimes(n-1);
+            },
+            1
+        );
+    } else {
+        console.log("done");
+    }
+}
+
+// Add additional functionality.  When the user presses "R" they
+// split as much as possible.  When press "E" they eject mass as
+// much as possible
+$(document).keydown(function(e) {
+    if(String.fromCharCode(e.keyCode) === "R") {
+        setTimeout(function() { AGAR.splitManyTimes(200); }, 10);
+    } else if(String.fromCharCode(e.keyCode) === "E") {
+        setTimeout(function() { AGAR.ejectManyTimes(200); }, 10);
+    }
+});
